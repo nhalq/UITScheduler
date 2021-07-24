@@ -2,6 +2,7 @@ let DEBUG = Object();
 
 if (!Bait.Storage.exist("_0x000")) {
   Bait.Storage.set("_0x000", JSON.stringify(Object({
+    typing: new String(),
     subjects: new Array(),
   })))
 }
@@ -21,6 +22,15 @@ $(document).ready(() => {
     data: JSON.parse(Bait.Storage.get("_0x000")),
 
     methods: {
+      insert: function(code) {
+        code = code.trim().toUpperCase();
+        if (!(code in g_subjects))
+          return false;
+
+        this.subjects.push(g_subjects[code]);
+        return true;
+      },
+
       remove: function(index) {
         return this.subjects.splice(index, 1);
       },
@@ -38,12 +48,27 @@ $(document).ready(() => {
       totalCredit: function() {
         if (!this.subjects.length)
           return 0;
+
         return this.subjects
-          .filter(subject => subject.credit)
-          .map(subject => subject.credit)
-          .reduce((shl,shr)=> shl + shr);
+          .filter(subject => subject.m_credit)
+          .map(subject => subject.m_credit)
+          .reduce((shl, shr) => shl + shr);
       }
-    }
+    },
+
+    watch: {
+      typing: function(typed) {
+        let classCodes = typed.split("\n");
+        if (classCodes.length <= 1)
+          return false;
+
+        this.typing = classCodes.slice(-1).pop();
+        classCodes = classCodes.slice(0, -1);
+        for (const code of classCodes)
+          this.insert(code);
+        return true;
+      }
+    },
   })
 
   var _0x001 = new Vue({
@@ -51,6 +76,16 @@ $(document).ready(() => {
     data: JSON.parse(Bait.Storage.get("_0x001")),
 
     methods: {
+      getClassCodes: function(schedule) {
+        return schedule.m_classes.map(class_ => {
+          let classCodes = Array(class_.m_code);
+          let classCodeParts = class_.m_code.split(".")
+          if (classCodeParts.slice(-1).pop().length === 1)
+            classCodes.unshift(classCodeParts.slice(0, -1).join("."));
+          return classCodes;
+        }).sort().flat();
+      },
+
       getSchedule: function(i = 0, available = new Bitset(60), current = new Array()) {
         if (i >= this.classGroups.length)
           return this.schedules.push(Object({
@@ -94,27 +129,27 @@ $(document).ready(() => {
     },
   });
 
-  $("#filter-area").keyup((e) => {
-    details = $(e.target).val().split("\n");
-    if (details.length > 1) {
-      $(e.target).val(details.slice(-1));
-      _0x000.subjects.push(... details.slice(0, -1).map(code => {
-        code = code.trim().toUpperCase();
-        if (g_subjects[code] !== undefined)
-          return g_subjects[code];
-        return Object({ code: code });
-      }).filter(subject => {
-        for (const registered of _0x000.subjects)
-          if (registered.code == subject.code)
-            return false;
-        return true;
-      }));
+  // $("#filter-area").keyup((e) => {
+  //   details = $(e.target).val().split("\n");
+  //   if (details.length > 1) {
+  //     $(e.target).val(details.slice(-1));
+  //     _0x000.subjects.push(... details.slice(0, -1).map(code => {
+  //       code = code.trim().toUpperCase();
+  //       if (g_subjects[code] !== undefined)
+  //         return g_subjects[code];
+  //       return Object({ code: code });
+  //     }).filter(subject => {
+  //       for (const registered of _0x000.subjects)
+  //         if (registered.code == subject.code)
+  //           return false;
+  //       return true;
+  //     }));
 
-      Bait.Storage.set("_0x000", JSON.stringify(Object({
-        subjects: _0x000.subjects,
-      })));
-    }
-  });
+  //     Bait.Storage.set("_0x000", JSON.stringify(Object({
+  //       subjects: _0x000.subjects,
+  //     })));
+  //   }
+  // });
 
   DEBUG._0x000 = _0x000;
   DEBUG._0x001 = _0x001;

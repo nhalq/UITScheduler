@@ -76,9 +76,9 @@ if (Bait.Storage.exist("BAIT_CLASSES")
     for (const class_ of g_classes) {
       let code = class_.m_code.split(".")[0];
       g_subjects[code] = Object({
-        code: code,
-        name: class_.m_name,
-        credit: class_.m_credit,
+        m_code: code,
+        m_name: class_.m_name,
+        m_credit: class_.m_credit,
       })
     }
 
