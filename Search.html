@@ -101,15 +101,15 @@
     <div id="filter-count" class="alert alert-info" role="alert">
       Có <b class="text-danger">{{schedules.length}}</b> kết quả phù hợp với yêu cầu của người anh em
     </div>
-    <table class="table table-sm align-middle">
+    <table class="table table-sm align-middle text-center">
       <thead>
         <tr>
           <th></th>
-          <th>Prior</th>
-          <th>Danh sách môn học</th>
+          <th>Độ căng</th>
+          <th>Chi tiết</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody >
         <tr v-for="(schedule, index) in getResult">
           <td>
             <button class="btn btn-sm btn-secondary">Xem</button>
@@ -117,8 +117,19 @@
           </td>
           <td>{{schedule.m_time.distance()}}</td>
           <td>
-            <div v-for="class_ in schedule.m_classes">
-              <code>{{class_.m_code}}</code><br>
+            <div class="d-inline-block">
+              <div v-for="(a, column) in Array(10).keys()" style="height: 8px; width: 96px">
+                <div
+                  v-for="(b, row) in Array(6).keys()"
+                  class="square border-top border-start d-inline-block"
+                  v-bind:class="{
+                    'bg-info': schedule.m_time.get(b * 10 + a),
+                    'border-end': row == 5,
+                    'border-bottom': column == 9,
+                  }"
+                >
+                </div>
+              </div>
             </div>
           </td>
         </tr>
