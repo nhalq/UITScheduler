@@ -3,6 +3,11 @@
   border-radius: 0 !important;
 }
 
+.square {
+  width: 16px !important;
+  height: 8px !important;
+}
+
 ::-webkit-scrollbar { width: 12px; }
 ::-webkit-scrollbar-track { background-color: #e0e0e0; }
 

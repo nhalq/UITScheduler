@@ -38,8 +38,8 @@ class Bitset {
     let previous = -1;
     for (const i of Array(this.m_size).keys()) {
       if (this.get(i)) {
-        if (previous >= 0)
-          result += (i - previous);
+        if (0 <= previous && !this.get(i - 1))
+          result += (i - previous - 1);
         previous = i;
       }
     }
@@ -114,8 +114,13 @@ Bait = Object({
     static set(key, value) {
       localStorage.setItem(key, value);
     }
+
     static get(key) {
       return localStorage.getItem(key);
+    }
+
+    static exist(key) {
+      return (key in localStorage);
     }
   },
 

@@ -1,12 +1,24 @@
 let DEBUG = Object();
 
+if (!Bait.Storage.exist("_0x000")) {
+  Bait.Storage.set("_0x000", JSON.stringify(Object({
+    subjects: new Array(),
+  })))
+}
+
+if (!Bait.Storage.exist("_0x001")) {
+  Bait.Storage.set("_0x001", JSON.stringify(Object({
+    limit: 32,
+    option: -1,
+    system: "CQUI",
+    schedules: new Array(),
+  })))
+}
 
 $(document).ready(() => {
   var _0x000 = new Vue({
     el: "#filter",
-    data: {
-      subjects: new Array(),
-    },
+    data: JSON.parse(Bait.Storage.get("_0x000")),
 
     methods: {
       remove: function(index) {
@@ -36,19 +48,14 @@ $(document).ready(() => {
 
   var _0x001 = new Vue({
     el: "#schedule",
-    data: {
-      limit: 32,
-      option: -1,
-      system: "CQUI",
-      schedules: new Array(),
-    },
+    data: JSON.parse(Bait.Storage.get("_0x001")),
 
     methods: {
       getSchedule: function(i = 0, available = new Bitset(60), current = new Array()) {
         if (i >= this.classGroups.length)
           return this.schedules.push(Object({
-            'm_time': available.copy(),
-            'm_classes': [...current],
+            "m_time": available.copy(),
+            "m_classes": [...current],
           }));
 
         for (const subject of this.classGroups[i]) {
@@ -65,8 +72,16 @@ $(document).ready(() => {
         this.classGroups = _0x000.getClassGroup(this.system);
         this.schedules.splice(0);
         if (this.classGroups.length)
-          return this.getSchedule();
-        return false;
+          this.getSchedule();
+
+        Bait.Storage.set("_0x001", JSON.stringify(Object({
+          limit: this.limit,
+          option: this.option,
+          system: this.system,
+          schedules: new Array(),
+        })));
+
+        return this.schedules.length;
       },
     },
 
@@ -95,16 +110,12 @@ $(document).ready(() => {
         return true;
       }));
 
-      Bait.Storage.set("_", JSON.stringify(_0x000.subjects))
+      Bait.Storage.set("_0x000", JSON.stringify(Object({
+        subjects: _0x000.subjects,
+      })));
     }
   });
 
   DEBUG._0x000 = _0x000;
   DEBUG._0x001 = _0x001;
-
-
-  // Load storage
-  if ('_' in localStorage) {
-    _0x000.subjects.push(... JSON.parse(Bait.Storage.get("_")));
-  }
 })
