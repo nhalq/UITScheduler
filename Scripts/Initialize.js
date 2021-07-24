@@ -52,11 +52,12 @@ class ParseEngine {
   }
 };
 
-if (Array("BAIT_CLASSES", "BAIT_SUBJECTS", "BAIT_BARECLASSES").map(key => key in localStorage).reduce((shl, shr) => shl + shr) == 3) {
+if (Bait.Storage.exist("BAIT_CLASSES")
+    && Bait.Storage.exist("BAIT_SUBJECTS")
+    && Bait.Storage.exist("BAIT_BARECLASSES")) {
   g_classes = JSON.parse(Bait.Storage.get("BAIT_CLASSES"));
   g_subjects = JSON.parse(Bait.Storage.get("BAIT_SUBJECTS"));
   g_bareClasses = JSON.parse(Bait.Storage.get("BAIT_BARECLASSES"));
-  console.log("BAIT: Loaded storage from local");
 } else {
   // Take workbook through XML request
   var request = new XMLHttpRequest();
@@ -88,5 +89,4 @@ if (Array("BAIT_CLASSES", "BAIT_SUBJECTS", "BAIT_BARECLASSES").map(key => key in
   }
 
   request.send();
-  console.log("BAIT: STORAGE UPDATED");
 }
