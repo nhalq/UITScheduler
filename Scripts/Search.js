@@ -57,6 +57,13 @@ $(document).ready(() => {
     },
 
     watch: {
+      subjects: function() {
+        Bait.Storage.set("_0x000", JSON.stringify(Object({
+          typing: new String(),
+          subjects: this.subjects,
+        })))
+      },
+
       typing: function(typed) {
         let classCodes = typed.split("\n");
         if (classCodes.length <= 1)
