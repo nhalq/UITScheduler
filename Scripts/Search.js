@@ -38,7 +38,7 @@ $(document).ready(() => {
       getClassGroup: function(system) {
         return this.subjects.map(sub =>
           g_classes.filter(cls =>
-            cls.m_system == system && cls.m_code.startsWith(sub.code)
+            cls.m_system == system && cls.m_code.startsWith(sub.m_code)
           )
         );
       },
@@ -59,8 +59,8 @@ $(document).ready(() => {
     watch: {
       subjects: function() {
         Bait.Storage.set("_0x000", JSON.stringify(Object({
-          typing: new String(),
-          subjects: this.subjects,
+          "typing": new String(),
+          "subjects": this.subjects,
         })))
       },
 
@@ -135,28 +135,6 @@ $(document).ready(() => {
       }
     },
   });
-
-  // $("#filter-area").keyup((e) => {
-  //   details = $(e.target).val().split("\n");
-  //   if (details.length > 1) {
-  //     $(e.target).val(details.slice(-1));
-  //     _0x000.subjects.push(... details.slice(0, -1).map(code => {
-  //       code = code.trim().toUpperCase();
-  //       if (g_subjects[code] !== undefined)
-  //         return g_subjects[code];
-  //       return Object({ code: code });
-  //     }).filter(subject => {
-  //       for (const registered of _0x000.subjects)
-  //         if (registered.code == subject.code)
-  //           return false;
-  //       return true;
-  //     }));
-
-  //     Bait.Storage.set("_0x000", JSON.stringify(Object({
-  //       subjects: _0x000.subjects,
-  //     })));
-  //   }
-  // });
 
   DEBUG._0x000 = _0x000;
   DEBUG._0x001 = _0x001;
