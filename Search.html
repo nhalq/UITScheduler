@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search</title>
+
+  <link href="Styles/FWs/bootstrap.min.css" rel="stylesheet">
+  <link href="Styles/Master.css" rel="stylesheet">
+
+  <script src="Scripts/FWs/jquery-3.6.0.min.js" type="text/javascript"></script>
+  <script src="Scripts/FWs/vue.min.js" type="text/javascript"></script>
+  <script src="Scripts/FWs/xlsx.full.min.js" type="text/javascript"></script>
+
+  <script src="Scripts/Object.js" type="text/javascript"></script>
+  <script src="Scripts/Initialize.js" type="text/javascript"></script>
+  <script src="Scripts/Search.js" type="text/javascript"></script>
+</head>
+<body>
+  <div id="filter" class="container">
+    <table class="table table-sm mt-3">
+      <thead>
+        <tr>
+          <th>Mã</th>
+          <th>Môn học</th>
+          <th class="text-center">Số TC</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(subject, index) in subjects" class="list-complete-item">
+          <td>{{subject.code}}</td>
+          <td>{{subject.name}}</td>
+          <td class="text-center">{{subject.credit}}</td>
+          <td><button class="btn btn-sm btn-info text-white" @click="remove(index)">Xóa</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="filter-count" class="alert alert-secondary" role="alert">
+      Người anh em đã đăng kí tổng cộng
+      <b
+        v-bind:class="{
+          'text-danger': totalCredit > 24,
+          'text-info'  : totalCredit > 10,
+        }"
+      >
+        {{totalCredit}}
+      </b>
+      tín chỉ
+    </div>
+
+    <div class="form-floating mb-3">
+      <textarea id="filter-area" class="form-control"></textarea>
+      <label for="filter-area">Mã môn học (hoặc danh sách mã môn học)</label>
+    </div>
+    <span class="d-inline-block" data-toggle="tooltip" data-placement="bottom" title="Đè nút ENTER để thêm (do em lười, anh em thông cảm)">
+      <button class="btn btn-secondary" style="pointer-events: none;" disabled>Thêm môn học</button>
+    </span>
+    <button class="btn btn-info text-white" @click="subjects.splice(0)">Xóa tất cả</button>
+  </div>
+
+  <div class="border-top width-100 m-5"></div>
+
+  <div id="schedule" class="container">
+    <div class="row">
+      <div class="col">
+        <div class="form-floating mb-3">
+          <select class="form-select" v-model="system">
+            <option value="CQUI">Chính quy</option>
+          </select>
+          <label>Hệ đào tạo</label>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <button class="btn btn-info text-white w-100" @click="search">Tìm kiếm</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-floating mb-3">
+          <select class="form-select" v-model="option">
+            <option value="-1">Lịch học thoải mái</option>
+            <option value="1">Lịch học dồn dập</option>
+          </select>
+          <label>Chọn chế độ học</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-floating mb-3">
+          <select class="form-select" v-model="limit">
+            <option v-for="i of Array(14).keys()" :value="1 << i">{{(1 << i)}}</option>
+          </select>
+          <label>Số kết quả hiển thị</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="filter-count" class="alert alert-info" role="alert">
+      Có <b class="text-danger">{{schedules.length}}</b> kết quả phù hợp với yêu cầu của người anh em
+    </div>
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Prior</th>
+          <th>Danh sách môn học</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(schedule, index) in getResult">
+          <td>
+            <button class="btn btn-sm btn-secondary">Xem</button>
+            <button class="btn btn-sm btn-info" @click="Bait.Clipboard.write('NHA_DEP_TRAI')">Copy</button>
+          </td>
+          <td>{{schedule.m_time.distance()}}</td>
+          <td>
+            <div v-for="class_ in schedule.m_classes">
+              <code>{{class_.m_code}}</code><br>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
