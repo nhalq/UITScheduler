@@ -49,6 +49,10 @@ $(document).ready(() => {
         // Format code
         code = code.trim().toUpperCase();
 
+        // Empty code
+        if (!code.length)
+          return alert.insertWarning(`Chưa nhập code kìa người anh em`);
+
         // Invalid code
         if (!(code in g_subjects))
           return alert.insertError(`Không tìm thấy <strong>${code}</strong> trong xlsx`);
