@@ -17,16 +17,47 @@ if (!Bait.Storage.exist("_0x001")) {
 }
 
 $(document).ready(() => {
+  var alert = new Vue({
+    el: "#alert",
+    data: {
+      messages: new Array(),
+    },
+
+    methods: {
+      insertError: function(message) {
+        this.messages.push({
+          type: "danger",
+          message: message,
+        });
+      },
+
+      insertWarning: function(message) {
+        this.messages.push({
+          type: "warning",
+          message: message,
+        });
+      },
+    },
+  });
+
   var _0x000 = new Vue({
     el: "#filter",
     data: JSON.parse(Bait.Storage.get("_0x000")),
 
     methods: {
       insert: function(code) {
+        // Format code
         code = code.trim().toUpperCase();
-        if (!(code in g_subjects))
-          return false;
 
+        // Invalid code
+        if (!(code in g_subjects))
+          return alert.insertError(`Không tìm thấy <strong>${code}</strong> trong xlsx`);
+
+        // Duplicate code
+        if (this.subjects.find(subject => subject.m_code == code))
+          return alert.insertWarning(`<strong>${code}</strong> đã có trong danh sách của người anh em`);
+
+        // Insert code to subjects list
         this.subjects.push(g_subjects[code]);
         return true;
       },
@@ -76,7 +107,7 @@ $(document).ready(() => {
         return true;
       }
     },
-  })
+  });
 
   var _0x001 = new Vue({
     el: "#schedule",
@@ -138,4 +169,5 @@ $(document).ready(() => {
 
   DEBUG._0x000 = _0x000;
   DEBUG._0x001 = _0x001;
+  DEBUG.alert = alert;
 })
