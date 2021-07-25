@@ -152,15 +152,19 @@
     </table>
   </div>
 
-  <div id="alert" class="position-fixed top-0 end-0 p-3">
+  <div id="alert" class="position-fixed top-0 end-0 p-3 text-right">
     <div v-for="message in messages"
       :class="'alert-' + message.type"
-      class="alert alert-dismissible fade show mb-1"
+      class="alert show mb-1"
       role="alert"
       style="opacity: .95;"
     >
       <span v-html="message.message"></span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float: right;"></button>
+    </div>
+
+    <div v-if="messages.length" class="alert show mb-1 p-0" role="alert" style="float: right">
+      <button class="btn btn-secondary m-0" @click="messages.splice(0)">Xóa tất cả</button>
     </div>
   </div>
 </body>
