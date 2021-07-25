@@ -152,19 +152,19 @@
     </table>
   </div>
 
-  <div id="alert" class="position-fixed top-0 end-0 p-3 text-right">
-    <div v-for="message in messages"
+  <div v-if="messages.length" id="alert" class="position-fixed top-0 end-0 p-3 text-right" style="background-color: rgba(28, 28, 28,0.0811);">
+    <h3 class="text-center bg-white p-3">Thông báo hệ thống</h3>
+    <div class="alert show mb-1 p-0" role="alert" style="text-align: right;">
+      <button class="btn btn-secondary m-0" @click="messages.splice(0)">Xóa tất cả</button>
+    </div>
+    <div v-for="(message, index) in messages"
       :class="'alert-' + message.type"
       class="alert show mb-1"
       role="alert"
       style="opacity: .95;"
     >
       <span v-html="message.message"></span>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float: right;"></button>
-    </div>
-
-    <div v-if="messages.length" class="alert show mb-1 p-0" role="alert" style="float: right">
-      <button class="btn btn-secondary m-0" @click="messages.splice(0)">Xóa tất cả</button>
+      <button type="button" class="btn-close" style="float: right;" @click="messages.splice(index, 1)"></button>
     </div>
   </div>
 </body>
