@@ -24,6 +24,13 @@ $(document).ready(() => {
     },
 
     methods: {
+      insertInfo: function(message) {
+        this.messages.push({
+          type: "info",
+          message: message,
+        });
+      },
+
       insertError: function(message) {
         this.messages.push({
           type: "danger",
@@ -159,6 +166,11 @@ $(document).ready(() => {
         })));
 
         return this.schedules.length;
+      },
+
+      copyClassCodes: function(schedule) {
+        Bait.Clipboard.write(this.getClassCodes(schedule).join('\n'));
+        alert.insertInfo('Đã sao chép vào Clipboard');
       },
     },
 

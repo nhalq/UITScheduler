@@ -2,11 +2,12 @@ const WORKBOOK_URL       = "Data/20-21-SEM2.xlsx";
 const SHEETNAME_THEORY   = "TKB LT";
 const SHEETNAME_PRACTICE = "TKB TH";
 
-var g_classes = Array();
-var g_bareClasses = Array();
+var g_classes = new Array();
+var g_bareClasses = new Array();
 
-var g_subjects = Object();
-var debug;
+var g_subjects = new Object();
+var g_CLCClassNames = new Set();
+
 class ParseEngine {
   static parseSheet(sheet) {
     let subjects = new Object();
@@ -32,8 +33,7 @@ class ParseEngine {
     g_bareClasses = Object({
       ... theory,
       ... practice,
-    })
-    debug= practice;
+    });
 
     let unusedCodes = new Set();
     practice = Object.values(practice).map(subject => {
@@ -58,6 +58,7 @@ if (Bait.Storage.exist("BAIT_CLASSES")
   g_classes = JSON.parse(Bait.Storage.get("BAIT_CLASSES"));
   g_subjects = JSON.parse(Bait.Storage.get("BAIT_SUBJECTS"));
   g_bareClasses = JSON.parse(Bait.Storage.get("BAIT_BARECLASSES"));
+  g_CLCClassNames = JSON.parse(Bait.Storage.get("BAIT_CLC_CLASSNAMES"));
 } else {
   // Take workbook through XML request
   var request = new XMLHttpRequest();
@@ -71,6 +72,15 @@ if (Bait.Storage.exist("BAIT_CLASSES")
         { type:"array" }
       )
     );
+
+    // Get all class names of CLC system
+    g_CLCClassNames = new Set(g_classes.map(class_ =>
+      (class_.m_code + ".0").split(".")[2]
+    ));
+    g_CLCClassNames.delete("CLC");
+    for (const i of Array(5).keys())
+      g_CLCClassNames.delete(i.toString());
+    g_CLCClassNames = new Array(...g_CLCClassNames.values())
 
     // Load subect detail
     for (const class_ of g_classes) {
@@ -86,6 +96,7 @@ if (Bait.Storage.exist("BAIT_CLASSES")
     Bait.Storage.set("BAIT_CLASSES", JSON.stringify(g_classes));
     Bait.Storage.set("BAIT_SUBJECTS", JSON.stringify(g_subjects));
     Bait.Storage.set("BAIT_BARECLASSES", JSON.stringify(g_bareClasses));
+    Bait.Storage.set("BAIT_CLC_CLASSNAMES", JSON.stringify(g_CLCClassNames));
   }
 
   request.send();

@@ -41,7 +41,7 @@
         </tr>
       </tbody>
     </table>
-    <div id="filter-count" class="alert alert-secondary" role="alert">
+    <div class="alert alert-secondary" role="alert">
       Người anh em đã đăng kí tổng cộng
       <b
         v-bind:class="{
@@ -70,8 +70,17 @@
         <div class="form-floating mb-3">
           <select class="form-select" v-model="system">
             <option value="CQUI">Chính quy</option>
+            <option value="CLC">Chất lương cao</option>
           </select>
           <label>Hệ đào tạo</label>
+        </div>
+      </div>
+      <div v-if="system=='CLC'" class="col">
+        <div class="form-floating mb-3">
+          <select class="form-select">
+            <option v-for="className of g_CLCClassNames" :value="className">{{className}}</option>
+          </select>
+          <label>Mã ngành</label>
         </div>
       </div>
     </div>
@@ -100,7 +109,7 @@
       </div>
     </div>
 
-    <div id="filter-count" class="alert alert-info" role="alert">
+    <div class="alert alert-info" role="alert">
       Có <b class="text-danger">{{schedules.length}}</b> kết quả phù hợp với yêu cầu của người anh em
     </div>
     <table class="table table-sm align-middle text-center">
@@ -109,13 +118,14 @@
           <th></th>
           <th>Độ căng</th>
           <th>Chi tiết</th>
+          <th>Danh sách</th>
         </tr>
       </thead>
       <tbody >
         <tr v-for="(schedule, index) in getResult">
           <td>
             <a class="btn btn-sm btn-secondary" :href="'Render.html?s=' + getClassCodes(schedule).join(';')" target="blank">Xem</a>
-            <button class="btn btn-sm btn-info text-white" @click="Bait.Clipboard.write(getClassCodes(schedule).join('\n'))">Sao chép</button>
+            <button class="btn btn-sm btn-info text-white" @click="copyClassCodes(schedule)">Sao chép</button>
           </td>
           <td>{{schedule.m_time.distance()}}</td>
           <td>
@@ -133,6 +143,9 @@
                 </div>
               </div>
             </div>
+          </td>
+          <td>
+            <code v-for="classCode in getClassCodes(schedule)" class="d-block">{{classCode}}</code>
           </td>
         </tr>
       </tbody>
