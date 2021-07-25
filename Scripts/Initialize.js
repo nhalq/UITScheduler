@@ -80,7 +80,12 @@ if (Bait.Storage.exist("BAIT_CLASSES")
     g_CLCClassNames.delete("CLC");
     for (const i of Array(5).keys())
       g_CLCClassNames.delete(i.toString());
-    g_CLCClassNames = new Array(...g_CLCClassNames.values())
+    g_CLCClassNames = new Array(...g_CLCClassNames.values()).sort((shl, shr) => {
+      if (shl.slice(2) != shr.slice(2))
+        return (shl.slice(2) < shr.slice(2)) ? -1 : 1;
+      return shl < shr ? -1 : 1;
+    });
+
 
     // Load subect detail
     for (const class_ of g_classes) {
