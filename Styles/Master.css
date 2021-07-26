@@ -8,6 +8,11 @@
   height: 8px !important;
 }
 
+.square-1 {
+  width: 42px !important;
+  height: 21px !important;
+}
+
 /* Text color for Register Level */
 .text-rl-0 { color: #6c6c6c !important; }
 .text-rl-1 { color: #27c27c !important; }

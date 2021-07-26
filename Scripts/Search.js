@@ -12,8 +12,9 @@ if (!Bait.Storage.exist("_0x001")) {
     limit: 32,
     option: -1,
     system: "CQUI",
-    schedules: new Array(),
-  })))
+    schedules: Array(),
+    m_mask: Array(10).fill().map(() => Array(6).fill().map(() => Object({value: 1}))),
+  })));
 }
 
 $(document).ready(() => {
@@ -134,7 +135,15 @@ $(document).ready(() => {
 
   var _0x001 = new Vue({
     el: "#schedule",
-    data: JSON.parse(Bait.Storage.get("_0x001")),
+    data: JSON.parse(Bait.Storage.get("_0x001"), (k, v) => {
+      if (k === "m_time") {
+        let clusters = Array(...v.m_clusters);
+        v = new Bitset(v.m_size);
+        v.m_clusters = Array(...clusters);
+      }
+
+      return v;
+    }),
 
     methods: {
       getClassCodes: function(schedule) {
@@ -147,12 +156,22 @@ $(document).ready(() => {
         }).sort().flat();
       },
 
-      getSchedule: function(i = 0, available = new Bitset(60), current = new Array()) {
-        if (i >= this.classGroups.length)
+      getBitMask() {
+        let mask = new Bitset(60);
+        for (let r of Array(10).keys())
+          for (let c of Array(6).keys())
+            if (!(this.m_mask[r][c].value))
+              mask.set(c * 10 + r);
+        return mask;
+      },
+
+      getSchedule: function(i = 0, available = this.getBitMask(), current = new Array()) {
+        if (i >= this.classGroups.length) {
           return this.schedules.push(Object({
-            "m_time": available.copy(),
+            "m_time": Bitset.xor(available.copy(), this.getBitMask()),
             "m_classes": [...current],
           }));
+        }
 
         for (const subject of this.classGroups[i]) {
           if (Bitset.and(available, subject.m_time).count())
@@ -170,13 +189,13 @@ $(document).ready(() => {
         if (this.classGroups.length)
           this.getSchedule();
 
-        Bait.Storage.set("_0x001", JSON.stringify(Object({
+        Bait.Storage.set("_0x001", JSON.stringify({
           limit: this.limit,
           option: this.option,
           system: this.system,
-          schedules: new Array(),
-        })));
-
+          schedules: this.schedules,
+          m_mask: this.m_mask,
+        }));
         return this.schedules.length;
       },
 
@@ -193,6 +212,12 @@ $(document).ready(() => {
           .slice(0, this.limit);
       }
     },
+
+    watch: {
+      m_mask: function() {
+        Bait.Storage.set("_0x001", JSON.stringify(_0x001));
+      },
+    }
   });
 
   DEBUG._0x000 = _0x000;

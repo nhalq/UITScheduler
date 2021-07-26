@@ -67,6 +67,23 @@
 
   <div id="schedule" class="container">
     <div class="row">
+      <div class="col d-inline-block mb-3 text-center">
+        <div v-for="(submask, row) in m_mask" style="height: 21px;">
+          <div
+            v-for="(cell, column) in submask"
+            v-bind:class="{
+              'border-end'   : column == 5,
+              'border-bottom': row    == 9,
+              'bg-info'      : cell.value,
+            }"
+            class="square-1 border-top border-start d-inline-block"
+            @click="cell.value = !cell.value"
+          >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col">
         <div class="form-floating mb-3">
           <select class="form-select" v-model="system">
