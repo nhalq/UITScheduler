@@ -61,7 +61,7 @@ $(document).ready(() => {
           return alert.insertWarning(`Chưa nhập code kìa người anh em`);
 
         // Invalid code
-        if (!(code in g_subjects))
+        if (!(code in g_Subjects))
           return alert.insertError(`Không tìm thấy <strong>${code}</strong> trong xlsx`);
 
         // Duplicate code
@@ -69,7 +69,7 @@ $(document).ready(() => {
           return alert.insertWarning(`<strong>${code}</strong> đã có trong danh sách của người anh em`);
 
         // Insert code to subjects list
-        this.subjects.push(g_subjects[code]);
+        this.subjects.push(g_Subjects[code]);
         return true;
       },
 
@@ -79,7 +79,7 @@ $(document).ready(() => {
 
       getClassGroup: function(system) {
         return this.subjects.map(sub =>
-          g_classes.filter(cls =>
+          g_Classes.filter(cls =>
             cls.m_system == system && cls.m_code.startsWith(sub.m_code)
           )
         );
@@ -93,7 +93,7 @@ $(document).ready(() => {
 
         return this.subjects
           .filter(subject => subject.m_credit)
-          .map(subject => subject.m_credit)
+          .map(subject => eval(subject.m_credit))
           .reduce((shl, shr) => shl + shr);
       }
     },

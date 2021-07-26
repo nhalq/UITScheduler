@@ -110,6 +110,20 @@ class Class {
 
 // NAMESPACE: Bait
 Bait = Object({
+  Log: class {
+    static write(...message) {
+      console.log("[BAIT]", ...message);
+    }
+
+    static error(...message) {
+      console.log("[BAIT_ERROR]", ...message);
+    }
+
+    static warn(...message) {
+      console.log("[BAIT_WARN]", ...message);
+    }
+  },
+
   Storage: class {
     static set(key, value) {
       localStorage.setItem(key, value);
