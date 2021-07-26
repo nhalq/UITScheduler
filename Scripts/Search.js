@@ -61,7 +61,7 @@ $(document).ready(() => {
           return alert.insertWarning(`Chưa nhập code kìa người anh em`);
 
         // Invalid code
-        if (!(code in g_Subjects))
+        if (!g_Classes.find(class_ => class_.m_code.startsWith(code)))
           return alert.insertError(`Không tìm thấy <strong>${code}</strong> trong xlsx`);
 
         // Duplicate code
@@ -69,8 +69,20 @@ $(document).ready(() => {
           return alert.insertWarning(`<strong>${code}</strong> đã có trong danh sách của người anh em`);
 
         // Insert code to subjects list
-        this.subjects.push(g_Subjects[code]);
-        return true;
+        let pattern = this.subjects.find(subject => subject.m_code.startsWith(code) || code.startsWith(subject.m_code));
+        if (pattern) {
+          // Push notofication
+          alert.insertWarning(`<strong>${pattern.m_code}</strong> sẽ được đổi thành <strong>${code}</strong>`);
+
+          // Change pattern code
+          pattern.m_code = code;
+          this.subjects.splice(this.subjects.indexOf(pattern), 1, pattern);
+        } else {
+          pattern = g_Classes.find(class_ => class_.m_code.startsWith(code));
+          pattern = JSON.parse(JSON.stringify(pattern));
+          pattern.m_code = code;
+          this.subjects.push(pattern);
+        }
       },
 
       remove: function(index) {
