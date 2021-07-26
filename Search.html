@@ -42,8 +42,12 @@
       Người anh em đã đăng kí tổng cộng
       <b
         v-bind:class="{
-          'text-danger': totalCredit > 24,
-          'text-info'  : totalCredit > 10,
+          'text-rl-0':                      totalCredit < 14,
+          'text-rl-1': 14 <= totalCredit && totalCredit < 18,
+          'text-rl-2': 18 <= totalCredit && totalCredit < 20,
+          'text-rl-3': 20 <= totalCredit && totalCredit < 24,
+          'text-rl-4': 24 <= totalCredit && totalCredit <= 30,
+          'text-rl-5': 30 < totalCredit,
         }"
       >
         {{totalCredit}}
