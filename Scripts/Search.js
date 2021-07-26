@@ -1,20 +1,20 @@
 let DEBUG = Object();
 
 if (!Bait.Storage.exist("_0x000")) {
-  Bait.Storage.set("_0x000", JSON.stringify(Object({
-    typing: new String(),
-    subjects: new Array(),
-  })))
+  Bait.Storage.set("_0x000", JSON.stringify({
+    typing: "",
+    subjects: Array(),
+  }));
 }
 
 if (!Bait.Storage.exist("_0x001")) {
-  Bait.Storage.set("_0x001", JSON.stringify(Object({
+  Bait.Storage.set("_0x001", JSON.stringify({
     limit: 32,
     option: -1,
     system: "CQUI",
     schedules: Array(),
     m_mask: Array(10).fill().map(() => Array(6).fill().map(() => Object({value: 1}))),
-  })));
+  }));
 }
 
 $(document).ready(() => {
@@ -53,6 +53,12 @@ $(document).ready(() => {
     data: JSON.parse(Bait.Storage.get("_0x000")),
 
     methods: {
+      getData() {
+        let _data = JSON.parse(JSON.stringify(this._data));
+        _data.typing = "";
+        return _data;
+      },
+
       insert: function(code) {
         // Format code
         code = code.trim().toUpperCase();
@@ -113,10 +119,7 @@ $(document).ready(() => {
 
     watch: {
       subjects: function() {
-        Bait.Storage.set("_0x000", JSON.stringify(Object({
-          "typing": new String(),
-          "subjects": this.subjects,
-        })))
+        Bait.Storage.set("_0x000", JSON.stringify(this.getData()));
       },
 
       typing: function(typed) {
@@ -146,6 +149,12 @@ $(document).ready(() => {
     }),
 
     methods: {
+      getData() {
+        let _data = JSON.parse(JSON.stringify(this._data));
+        _data.schedules = new Array();
+        return _data;
+      },
+
       getClassCodes: function(schedule) {
         return schedule.m_classes.map(class_ => {
           let classCodes = Array(class_.m_code);
@@ -188,14 +197,9 @@ $(document).ready(() => {
         this.schedules.splice(0);
         if (this.classGroups.length)
           this.getSchedule();
+          console.log();
 
-        Bait.Storage.set("_0x001", JSON.stringify({
-          limit: this.limit,
-          option: this.option,
-          system: this.system,
-          schedules: this.schedules,
-          m_mask: this.m_mask,
-        }));
+        Bait.Storage.set("_0x001", JSON.stringify(this.getData()));
         return this.schedules.length;
       },
 
@@ -215,7 +219,7 @@ $(document).ready(() => {
 
     watch: {
       m_mask: function() {
-        Bait.Storage.set("_0x001", JSON.stringify(_0x001));
+        Bait.Storage.set("_0x001", JSON.stringify(this.getData()));
       },
     }
   });
