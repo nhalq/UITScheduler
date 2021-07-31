@@ -8,6 +8,20 @@
   height: 8px !important;
 }
 
+.square-1 {
+  width: 42px !important;
+  height: 21px !important;
+}
+
+/* Text color for Register Level */
+.text-rl-0 { color: #6c6c6c !important; }
+.text-rl-1 { color: #27c27c !important; }
+.text-rl-2 { color: #2fb2fb !important; }
+.text-rl-3 { color: #bf00bf !important; }
+.text-rl-4 { color: #f0af0a !important; }
+.text-rl-5 { color: #ec1a1a !important; }
+
+
 ::-webkit-scrollbar { width: 12px; }
 ::-webkit-scrollbar-track { background-color: #e0e0e0; }
 

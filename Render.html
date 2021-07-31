@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Render</title>
+
+  <link href="Styles/FWs/bootstrap.min.css" rel="stylesheet">
+  <link href="Styles/Master.css" rel="stylesheet">
+
+  <script src="Scripts/FWs/vue.min.js" lang="text/javascript"></script>
+</head>
+<body>
+  <div class="container pt-5">
+    <div class="alert alert-primary" role="alert">
+      <span>Chưa có thời gian dev! Thông cảm!</span>
+    </div>
+  </div>
+
+  <div id="b0x000" class="container">
+    <ul class="list-group w-25">
+      <li v-for="classCode in classCodes" class="list-group-item list-group-item-action">
+        {{classCode}}
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    let currentURL = new URL(window.location.href);
+    let searchParam = currentURL.searchParams.get("s");
+
+    let classCodes = new Array();
+    if (searchParam)
+      classCodes = searchParam.split(";");
+
+    new Vue({
+      el: "#b0x000",
+      data: {
+        classCodes: classCodes,
+      }
+    })
+  </script>
+</body>
+</html>

@@ -20,6 +20,11 @@ class Bitset {
       Boolean(this.m_clusters[parseInt(position / Bitset.BIT_PER_4BYTES)] |= (1 << (position % Bitset.BIT_PER_4BYTES))) : 0;
   }
 
+  reset(position) {
+    return 0 <= position && position < this.m_size ?
+      Boolean(this.m_clusters[parseInt(position / Bitset.BIT_PER_4BYTES)] &= ~(1 << (position % Bitset.BIT_PER_4BYTES))) : 0;
+  }
+
   get(position) {
     return 0 <= position && position < this.m_size ?
       Boolean(this.m_clusters[parseInt(position / Bitset.BIT_PER_4BYTES)] & (1 << (position % Bitset.BIT_PER_4BYTES))) : 0;
@@ -58,6 +63,13 @@ class Bitset {
     let result = new Bitset(Math.max(shl.m_size, shr.m_size));
     for (const i of Array(result.m_clusters.length).keys())
       result.m_clusters[i] = shl.m_clusters[i] & shr.m_clusters[i];
+    return result;
+  }
+
+  static xor(shl, shr) {
+    let result = new Bitset(Math.max(shl.m_size, shr.m_size));
+    for (const i of Array(result.m_clusters.length).keys())
+      result.m_clusters[i] = shl.m_clusters[i] ^ shr.m_clusters[i];
     return result;
   }
 
@@ -110,6 +122,20 @@ class Class {
 
 // NAMESPACE: Bait
 Bait = Object({
+  Log: class {
+    static write(...message) {
+      console.log("[BAIT]", ...message);
+    }
+
+    static error(...message) {
+      console.log("[BAIT_ERROR]", ...message);
+    }
+
+    static warn(...message) {
+      console.log("[BAIT_WARN]", ...message);
+    }
+  },
+
   Storage: class {
     static set(key, value) {
       localStorage.setItem(key, value);
