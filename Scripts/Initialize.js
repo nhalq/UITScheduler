@@ -1,3 +1,4 @@
+const API_VERSION        = "0.0";
 const WORKBOOK_URL       = "Data/21-22-SEM1.xlsx";
 const SHEETNAME_THEORY   = "TKB LT";
 const SHEETNAME_PRACTICE = "TKB TH";
@@ -56,6 +57,10 @@ class ParseEngine {
 };
 
 function isStoraged() {
+  let api = JSON.parse(localStorage.getItem("API"));
+  if (!api || api.version != API_VERSION)
+    return false;
+
   if (Bait.Storage.exist('DEBUG')) {
     Bait.Log.write("DEBUG MODE is on");
     return false;
@@ -110,6 +115,7 @@ if (isStoraged()) {
 
     // Storing components into local storage
     Bait.Log.write("Write data to local storage");
+    localStorage.setItem("API", JSON.stringify({"version": API_VERSION}));
     BAIT_VARIABLES.map(entity => Bait.Storage.set("Bait::"+entity, JSON.stringify(eval(entity))));
   }
 
