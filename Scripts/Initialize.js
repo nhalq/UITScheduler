@@ -1,5 +1,5 @@
 const API_VERSION        = "0.0";
-const WORKBOOK_URL       = "Data/21-22-SEM1.xlsx";
+const WORKBOOK_URL       = "Data/21-22-SEM2.xlsx";
 const SHEETNAME_THEORY   = "TKB LT";
 const SHEETNAME_PRACTICE = "TKB TH";
 
